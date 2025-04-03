@@ -3,16 +3,28 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "lint": "eslint 'src/**/*.ts'"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^5.0.1",
+    "@types/morgan": "^1.9.9",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.23.0",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

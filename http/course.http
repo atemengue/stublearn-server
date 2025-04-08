@@ -1,0 +1,94 @@
+### Create a new course
+POST http://localhost:3000/api/course
+Content-Type: application/json
+
+{
+
+    "id": 1,
+    "name": "HTTP Basics",
+    "slug": "http-basics",
+    "description": "A beginner-friendly course on HTTP.",
+    "price": 9.99,
+    "onSale": false,
+    "displayPrice": null,
+    "image": "http://example.com/image.jpg",
+    "categories": ["Web Development", "Networking"],
+    "published": true,
+    "completed": [1, 2, 3],
+    "difficulty": "ALL_LEVELS",
+    "paid": true
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+# {
+
+#     "id": 1,
+#     "name": "HTTP Basics",
+#     "slug": "http-basics",
+#     "description": "A beginner-friendly course on HTTP.",
+#     "price": 9.99,
+#     "onSale": false,
+#     "displayPrice": null,
+#     "image": "http://example.com/image.jpg",
+#     "categories": ["Web Development", "Networking"],
+#     "published": true,
+#     "completed": [1, 2, 3],
+#     "difficulty": "ALL_LEVELS",
+#     "paid": true,
+#     "instructor": {
+#       "id": 101,
+#       "name": "John Doe"
+#     },
+#     "instructorId": 101,
+#     "lessons": [
+#       {
+#         "id": 201,
+#         "title": "Introduction to HTTP",
+#         "duration": "10 minutes"
+#       },
+#       {
+#         "id": 202,
+#         "title": "HTTP Methods",
+#         "duration": "15 minutes"
+#       }
+#     ],
+#     "ratings": [
+#       {
+#         "id": 301,
+#         "rating": 4.5,
+#         "comment": "Great course!"
+#       },
+#       {
+#         "id": 302,
+#         "rating": 5.0,
+#         "comment": "Very informative."
+#       }
+#     ],
+#     "createdAt": "2023-01-01T00:00:00Z",
+#     "updatedAt": "2023-01-02T00:00:00Z",
+#     "Completed": [
+#       {
+#         "id": 401,
+#         "lessonId": 201,
+#         "userId": 501
+#       }
+#     ],
+#     "QA": [
+#       {
+#         "id": 601,
+#         "question": "What is HTTP?",
+#         "answer": "HTTP stands for HyperText Transfer Protocol."
+#       }
+#     ]
+# }

@@ -4,6 +4,7 @@ import createError from 'http-errors';
 import logger from 'morgan';
 import path from 'path';
 import indexRoutes from './routes';
+import courseRoutes from './routes/course.routes';
 
 const app : Express = express();
 
@@ -19,15 +20,13 @@ app.use(express.static(path.join(path.resolve(), 'public')));
 
 
 app.use(indexRoutes);
+app.use(courseRoutes);
 
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
 });
-
-
-
 
 // error handler
 app.use((err: any, req: Request, res: Response) => {

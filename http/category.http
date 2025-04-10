@@ -1,0 +1,32 @@
+
+### Create a category
+POST http://localhost:3000/category
+Content-Type: application/json
+
+{
+  "name": "New Category",
+  "slug": "slug1"
+}
+
+### Read all categories
+GET http://localhost:3000/categories
+
+### Update a category
+PUT http://localhost:3000/category/example-slug
+Content-Type: application/json
+
+{
+  "name": "Updated Category",
+  "description": "Updated description of the category"
+}
+
+### Delete a category by slug
+DELETE http://localhost:3000/category/example-slug
+
+### Delete multiple categories
+DELETE http://localhost:3000/categories
+Content-Type: application/json
+
+{
+  "slugs": ["slug1", "slug2", "slug3"]
+}

@@ -12,11 +12,11 @@ Content-Type: application/json
     "onSale": false,
     "displayPrice": null,
     "image": "http://example.com/image.jpg",
-    "categories": ["Web Development", "Networking"],
     "published": true,
     "completed": [1, 2, 3],
     "difficulty": "ALL_LEVELS",
-    "paid": true
+    "paid": true,
+    "instructorId": 1
 }
 
 

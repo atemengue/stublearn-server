@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import slugify from 'slugify';
 import prisma from '../config/prisma-client';
+import { HttpResponse } from '../protocols/http';
 
 export const uploadImage = async (req: Request, res: Response) => {
 
@@ -10,20 +11,28 @@ export const deleteImage = async (req: Request, res: Response) => {
 
 }
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: Request): Promise<HttpResponse> => {
   try {
-    // const alreadyExist = await prisma.course.findUnique({
-    //   where: { slug: slugify(req.body.name.toLowerCase())}});
+    const alreadyExist = await prisma
+    .course
+    .findFirst({ where: { slug: slugify(req.body.name.toLowerCase()) }});
 
-    // if (alreadyExist) return res.status(400).send("Title is taken");
-    
+    if (alreadyExist) return {
+      status: 400,
+      body: "Title is taken",
+    } 
     const course = await prisma.course.create({
       data: {
         slug: slugify(req.body.name),
         ...req.body}})
-
-    res.status(201).send(course);
+      return  {
+        status: 201,
+        body: course,
+      }
   } catch (error) {
-    res.status(500).send({ error: 'Error creating course' });
+    return {
+      status: 500,
+      body: `${error} :Error creating course`
+    }
   }
 }

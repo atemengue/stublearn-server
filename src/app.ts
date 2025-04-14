@@ -7,6 +7,7 @@ import indexRoutes from './routes';
 import authRoutes from './routes/auth.routes';
 import categoryRoutes from './routes/category.routes';
 import courseRoutes from './routes/course.routes';
+import lessonTypeRoutes from './routes/lesson.type.routes';
 
 const app : Express = express();
 
@@ -25,6 +26,7 @@ app.use(indexRoutes);
 app.use(courseRoutes);
 app.use(authRoutes);
 app.use(categoryRoutes);
+app.use(lessonTypeRoutes);
 
 
 // catch 404 and forward to error handler

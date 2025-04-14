@@ -2,7 +2,7 @@ import { Router } from 'express';
 import expressWrapper from '../adapters/expressWrapper';
 import * as courseController from '../controllers/course';
 import * as moduleController from '../controllers/module';
-
+import * as lessonController from 
 
 const router: Router =Router();
 
@@ -16,6 +16,11 @@ router.get("/api/course/:courseId/module", expressWrapper(moduleController.listM
 router.post("/api/course/module/:courseId", expressWrapper(moduleController.addModule));
 router.post("/api/course/module/:moduleId", expressWrapper(moduleController.removeModule));
 router.put("/api/course/module/:moduleId", expressWrapper(moduleController.updateModule));
+
+
+// lesson course
+router.post("/api/module/lesson/:moduleId", expressWrapper(moduleController.addModule));
+
 
 
 const courseRoutes = router;

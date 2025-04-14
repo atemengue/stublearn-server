@@ -1,0 +1,19 @@
+### Create Lesson Type
+POST http://localhost:3000/api/lesson-type
+Content-Type: application/json
+
+{
+  "name": "text"
+}
+
+# ### Response
+# 200 OK
+# Content-Type: application/json
+
+# {
+#   "id": "string",
+#   "name": "string",
+#   "description": "string",
+#   "createdAt": "string",
+#   "updatedAt": "string"
+# }

@@ -40,6 +40,9 @@ export const read = async (req: Request): Promise<HttpResponse> => {
   try {
     const course = await prisma.course.findFirst({
       where: { slug: req.params.slug },
+      include: {
+        modules: true
+      }
     });
     return {
       status: 200,

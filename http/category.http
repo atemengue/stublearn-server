@@ -11,6 +11,10 @@ Content-Type: application/json
 ### Read all categories
 GET http://localhost:3000/categories
 
+
+### Read one category
+GET http://localhost:3000/category/slug
+
 ### Update a category
 PUT http://localhost:3000/category/example-slug
 Content-Type: application/json

@@ -10,7 +10,6 @@ export const uploadImage = async (req: Request, res: Response) => {
 export const deleteImage = async (req: Request, res: Response) => {
 
 }
-
 export const create = async (req: Request): Promise<HttpResponse> => {
   try {
     const alreadyExist = await prisma
@@ -33,6 +32,37 @@ export const create = async (req: Request): Promise<HttpResponse> => {
     return {
       status: 500,
       body: `${error} :Error creating course`
+    }
+  }
+}
+
+export const read = async (req: Request): Promise<HttpResponse> => {
+  try {
+    const course = await prisma.course.findFirst({
+      where: { slug: req.params.slug },
+    });
+    return {
+      status: 200,
+      body: course
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      body: "Error fetching course"
+    }
+  }
+}
+export const courses = async (req: Request): Promise<HttpResponse> => {
+  try {
+    const courses = await prisma.course.findMany();
+    return {
+      status: 200,
+      body: courses
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      body: "Error fetching course"
     }
   }
 }

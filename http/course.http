@@ -20,7 +20,12 @@ Content-Type: application/json
 }
 
 
+### Get all courses
+GET http://localhost:3000/api/courses
 
+
+### Get one course
+GET http://localhost:3000/api/course/http-basics
 
 
 

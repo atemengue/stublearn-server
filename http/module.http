@@ -1,0 +1,32 @@
+
+###
+POST http://localhost:3000/api/course/module/1  HTTP/1.1
+Host: localhost
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Module 4"
+}
+
+###
+PUT http://localhost:3000/api/course/module/1  HTTP/1.1
+Host: localhost
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Module 1"
+}
+
+
+###
+DELETE http://localhost:3000/api/course/module/1  HTTP/1.1
+Host: localhost
+Accept: application/json
+
+
+### list of course modules
+GET http://localhost:3000/api/course/1/module  HTTP/1.1
+Host: localhost
+Accept: application/json

@@ -121,6 +121,7 @@ exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
   name: 'name',
+  createdAt: 'createdAt',
   password: 'password',
   passwordResetCode: 'passwordResetCode',
   picture: 'picture',
@@ -128,8 +129,16 @@ exports.Prisma.UserScalarFieldEnum = {
   stripeAccountId: 'stripeAccountId',
   stripeSeller: 'stripeSeller',
   stripeSession: 'stripeSession',
-  updatedAt: 'updatedAt',
-  createdAt: 'createdAt'
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ModuleScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  courseId: 'courseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.CourseScalarFieldEnum = {
@@ -157,7 +166,15 @@ exports.Prisma.LessonScalarFieldEnum = {
   content: 'content',
   video: 'video',
   freePreview: 'freePreview',
-  courseId: 'courseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  lessonTypeId: 'lessonTypeId',
+  moduleId: 'moduleId'
+};
+
+exports.Prisma.LessonTypeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -189,12 +206,12 @@ exports.Prisma.CompletedScalarFieldEnum = {
 exports.Prisma.PostScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  slug: 'slug',
-  body: 'body',
   published: 'published',
+  body: 'body',
+  createdAt: 'createdAt',
   excerpt: 'excerpt',
   postedById: 'postedById',
-  createdAt: 'createdAt',
+  slug: 'slug',
   updatedAt: 'updatedAt'
 };
 
@@ -271,8 +288,10 @@ exports.Difficulty = exports.$Enums.Difficulty = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Module: 'Module',
   Course: 'Course',
   Lesson: 'Lesson',
+  LessonType: 'LessonType',
   Rating: 'Rating',
   Category: 'Category',
   Completed: 'Completed',

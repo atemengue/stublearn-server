@@ -1,17 +1,175 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output = "./generated/prisma"
+  output   = "./generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int         @id @default(autoincrement())
+  email             String      @unique
+  name              String?
+  createdAt         DateTime    @default(now())
+  password          String
+  passwordResetCode String?     @default("")
+  picture           String      @default("/avatar.png")
+  role              Role        @default(SUBSCRIBER)
+  stripeAccountId   String?
+  stripeSeller      Json?
+  stripeSession     Json?
+  updatedAt         DateTime    @updatedAt
+  Answer            Answer[]
+  Completed         Completed[]
+  Course            Course[]
+  posts             Post[]
+  QA                QA[]
+  Support           Support[]
+}
+
+model Module {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(160)
+  slug      String?  @db.VarChar(255)
+  courseId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id])
+  lessons   Lesson[] 
+}
+
+model Course {
+  id           Int         @id @default(autoincrement())
+  name         String      @db.VarChar(160)
+  slug         String?     @db.VarChar(255)
+  description  String
+  price        Float       @default(9.99)
+  onSale       Boolean     @default(false)
+  displayPrice Float?
+  image        String?
+  published    Boolean     @default(false)
+  completed    Int[]
+  difficulty   Difficulty  @default(ALL_LEVELS)
+  paid         Boolean     @default(true)
+  instructorId Int
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Completed    Completed[]
+  instructor   User        @relation(fields: [instructorId], references: [id])
+  modules      Module[]
+  QA           QA[]
+  ratings      Rating[]
+  categories   Category[]  @relation("CategoryToCourse")
+}
+
+model Lesson {
+  id           Int        @id @default(autoincrement())
+  title        String     @db.VarChar(160)
+  slug         String?    @db.VarChar(255)
+  content      String
+  video        String?
+  freePreview  Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  lessonTypeId Int
+  moduleId     Int?       
+  lessonType   LessonType @relation(fields: [lessonTypeId], references: [id])
+  QA           QA[]
+  module       Module?  @relation(fields: [moduleId], references: [id])
+  // instructor   User        @relation(fields: [instructorId], references: [id])
+
+}
+
+model LessonType {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(160)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Lessons   Lesson[]
+}
+
+model Rating {
+  id       Int     @id @default(autoincrement())
+  value    Int
+  comment  String?
+  courseId Int
+  course   Course  @relation(fields: [courseId], references: [id])
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(56)
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[] @relation("CategoryToCourse")
+  Post      Post[]   @relation("CategoryToPost")
+}
+
+model Completed {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  lessons   Int[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String     @db.VarChar(240)
+  published  Boolean    @default(true)
+  body       String
+  createdAt  DateTime   @default(now())
+  excerpt    String?    @db.VarChar(1000)
+  postedById Int
+  slug       String?    @unique @db.VarChar(255)
+  updatedAt  DateTime   @updatedAt
+  postedBy   User       @relation(fields: [postedById], references: [id])
+  categories Category[] @relation("CategoryToPost")
+}
+
+model QA {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(512)
+  slug        String?  @unique @db.VarChar(255)
+  description String
+  resolved    Boolean  @default(false)
+  postedById  Int
+  courseId    Int?
+  lessonId    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  answers     Answer[]
+  course      Course?  @relation(fields: [courseId], references: [id])
+  lesson      Lesson?  @relation(fields: [lessonId], references: [id])
+  postedBy    User     @relation(fields: [postedById], references: [id])
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  content    String   @db.VarChar(56)
+  postedById Int
+  qaId       Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  postedBy   User     @relation(fields: [postedById], references: [id])
+  qa         QA       @relation(fields: [qaId], references: [id])
+}
+
+model Support {
+  id         Int      @id @default(autoincrement())
+  courseUrl  String?  @db.VarChar(512)
+  message    String
+  resolved   Boolean  @default(false)
+  postedById Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  postedBy   User     @relation(fields: [postedById], references: [id])
 }
 
 enum Role {
@@ -21,163 +179,9 @@ enum Role {
   ADMIN
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
-
-  password         String
-  passwordResetCode String?   @default("")
-  picture           String    @default("/avatar.png")
-  role              Role      @default(SUBSCRIBER)
-  stripeAccountId   String?
-  stripeSeller      Json?
-  stripeSession     Json?
-
-
-  Completed Completed[]
-  Course Course[]
-  QA QA[]
-  Answer Answer[]
-  Support Support[]
-
-  updatedAt         DateTime  @updatedAt
-  createdAt         DateTime  @default(now())
-}
-
-model Course {
-  id            Int       @id @default(autoincrement())
-  name          String    @db.VarChar(160)
-  slug          String?   @db.VarChar(255)
-  description   String
-  price         Float     @default(9.99)
-  onSale        Boolean   @default(false)
-  displayPrice  Float?
-  image         String?
-  categories    Category[]
-  published     Boolean   @default(false)
-  completed     Int[]
-  difficulty    Difficulty @default(ALL_LEVELS)
-  paid          Boolean   @default(true)
-  instructor    User      @relation(fields: [instructorId], references: [id])
-  instructorId  Int
-  lessons       Lesson[]
-  ratings       Rating[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  Completed Completed[]
-
-  QA QA[]
-}
-
-model Lesson {
-  id           Int      @id @default(autoincrement())
-  title        String   @db.VarChar(160)
-  slug         String?  @db.VarChar(255)
-  content      String   @db.Text
-  video        String?
-  freePreview  Boolean  @default(false)
-  course       Course   @relation(fields: [courseId], references: [id])
-  courseId     Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  QA QA[]
-}
-
-model Rating {
-  id        Int      @id @default(autoincrement())
-  value     Int
-  comment   String?
-  course    Course   @relation(fields: [courseId], references: [id])
-  courseId  Int
-}
-
 enum Difficulty {
   ALL_LEVELS
   BEGINNER
   INTERMEDIATE
   ADVANCE
 }
-
-
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @db.VarChar(56)
-  slug  String @unique
-  courses Course[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Post Post[]
-}
-
-
-model Completed {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  course    Course   @relation(fields: [courseId], references: [id])
-  courseId  Int
-  lessons   Int[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Post {
-  id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(240)
-  slug        String?   @unique @db.VarChar(255)
-  body        String    @db.Text
-  published   Boolean   @default(true)
-  excerpt     String?   @db.VarChar(1000)
-  categories  Category[]
-  postedBy    User      @relation(fields: [postedById], references: [id])
-  postedById  Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-
-model QA {
-  id          Int       @id @default(autoincrement())
-  title       String    @db.VarChar(512)
-  slug        String?   @unique @db.VarChar(255)
-  description String    @db.Text
-  resolved    Boolean   @default(false)
-  postedBy    User      @relation(fields: [postedById], references: [id])
-  postedById  Int
-  course      Course?   @relation(fields: [courseId], references: [id])
-  courseId    Int?
-  lesson      Lesson?   @relation(fields: [lessonId], references: [id])
-  lessonId    Int?
-  answers     Answer[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Answer {
-  id        Int      @id @default(autoincrement())
-  content   String   @db.VarChar(56)
-  postedBy  User     @relation(fields: [postedById], references: [id])
-  postedById Int
-  qa        QA       @relation(fields: [qaId], references: [id])
-  qaId      Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-
-model Support {
-  id        Int      @id @default(autoincrement())
-  courseUrl String?  @db.VarChar(512)
-  message   String   @db.Text
-  resolved  Boolean  @default(false)
-  postedBy  User     @relation(fields: [postedById], references: [id])
-  postedById Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-

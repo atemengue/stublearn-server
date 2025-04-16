@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import expressWrapper from '../adapters/expressWrapper';
 import * as courseController from '../controllers/course';
+import * as lessonController from '../controllers/lesson';
 import * as moduleController from '../controllers/module';
-import * as lessonController from 
 
 const router: Router =Router();
 
